@@ -9,8 +9,8 @@ const AnimatedBackground = () => {
             this.y = y;
             this.radius = radius;
             this.color = color;
-            this.dx = (Math.random() - 0.5) * 2;
-            this.dy = (Math.random() - 0.5) * 2;
+            this.dx = (Math.random() - 0.5) * 4 + (Math.random() > 0.5 ? 0.5 : -0.5);
+            this.dy = (Math.random() - 0.5) * 4 + (Math.random() > 0.5 ? 0.5 : -0.5);
             this.originalColor = color;
             this.mixedColor = color;
         }
@@ -85,12 +85,12 @@ const AnimatedBackground = () => {
         // Create only 3 orbs
         const colors = ['#4CAF50', '#2196F3', '#9C27B0'];
         const orbs = [];
-        for (let i = 0; i < 3; i++) {  // Changed to 3 orbs
+        for (let i = 0; i < 3; i++) {
             orbs.push(new Orb(
-                Math.random() * canvas.width,
-                Math.random() * canvas.height,
+                Math.random() * (canvas.width - 600) + 300,  // Keep orbs away from edges
+                Math.random() * (canvas.height - 600) + 300, // Keep orbs away from edges
                 300,
-                colors[i]  // Each orb gets its own color
+                colors[i]
             ));
         }
 
