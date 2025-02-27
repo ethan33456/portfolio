@@ -11,7 +11,7 @@ const Intro = () => {
   return (
     <>
       {/* fixed at top */}
-      <div className='headerr z-50 absolute bg-DeepNightBlack backdrop-blur-sm inset-y-0 h-48 top-0 flex items-center justify-center w-full flex-col px-4 gap-y-4'>
+      <div className='headerr z-50 absolute backdrop-blur-sm inset-y-0 h-48 top-0 flex items-center justify-center w-full flex-col px-4 gap-y-4'>
         <Image className='w-20 h-20 rounded-full' src={EthanImage} alt='profile picture' />
         <div className='flex flex-col items-center justify-center'>
           <span className='text-gray-300 text-base font-bold break-normal'>{NAME}</span>
