@@ -25,7 +25,7 @@ const home = () => {
     return (
         <>
             <AnimatedBackground />
-            <div className="Home-Page relative">
+            <div className="Home-Page relative lg:mt-3 lg:mr-3 lg:ml-3 lg:mb-3 md:rounded-xl overflow-hidden">
                 <div id="home">
                     <Banner />
                 </div>

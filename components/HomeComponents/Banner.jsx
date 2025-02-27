@@ -2,7 +2,7 @@ import Typewriter from 'typewriter-effect';
 
 const Banner = () => {
     return (
-        <div className="lg:px-8 2xl:px-16 py-16 lg:py-14">
+        <div className="px-2 md:px-8 py-4 py-16">
             <div className="flex flex-col">
                 <div className="flex flex-col gap-y-4">
                     <h1 className="text-Snow text-4xl lg:text-5xl font-bold mb-4">
