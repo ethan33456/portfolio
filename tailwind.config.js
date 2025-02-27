@@ -9,7 +9,7 @@ module.exports = {
       colors: {
         Green: "#1fdf64",
         Black: "#000",
-        DeepNightBlack: "#121212",
+        DeepNightBlack: "#12121280",
         MidNightBlack: "#181818",
         EveningBlack: "#1a1a1a",
         DarkGray: "#282828",
@@ -29,4 +29,5 @@ module.exports = {
       }
     },
   },
+  plugins: [],
 }
