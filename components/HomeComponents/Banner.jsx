@@ -1,10 +1,9 @@
 import Typewriter from 'typewriter-effect';
-import { Link } from 'react-scroll';
 
 const Banner = () => {
     return (
-        <div className="lg:px-8 2xl:px-16 py-16 lg:py-28">
-            <div className="flex flex-col px-4 lg:px-8">
+        <div className="lg:px-8 2xl:px-16 py-16 lg:py-14">
+            <div className="flex flex-col">
                 <div className="flex flex-col gap-y-4">
                     <h1 className="text-Snow text-4xl lg:text-5xl font-bold mb-4">
                         Hi, I'm Ethan Bell
@@ -23,16 +22,10 @@ const Banner = () => {
                             </span>
                         </span>
                     </div>
-                    <Link 
-                        to='intro' 
-                        spy={true} 
-                        smooth={true} 
-                        duration={500} 
-                        offset={-50} 
-                        className="button w-fit mt-4"
-                    >
-                        Explore
-                    </Link>
+                    <p className="text-Snow text-lg lg:text-xl mt-4 max-w-2xl">
+                        I specialize in building and designing exceptional digital experiences. 
+                        Currently, I'm focused on building accessible, human-centered products.
+                    </p>
                 </div>
             </div>
         </div>

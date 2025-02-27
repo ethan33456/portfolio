@@ -45,7 +45,7 @@ export default function Layout({ children }) {
         {/* right side */}
         {/* right side */}
         <div className={`hidden lg:block absolute lg:w-20 lg:relative bg-DeepNightBlack shadow-2xl rounded-xl overflow-hidden`}>
-          <div onClick={(e) => setIsOpen(!isOpen)} className='bg-MidNightBlack text-Green hidden lg:flex items-center h-16 justify-center text-2xl '>
+          <div onClick={(e) => setIsOpen(!isOpen)} className='text-Green hidden lg:flex items-center h-16 justify-center text-2xl '>
             <span className='icon border-2 border-Green p-2 rounded-xl'>
               {' '}
               <FaBars />

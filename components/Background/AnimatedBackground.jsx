@@ -89,7 +89,7 @@ const AnimatedBackground = () => {
             orbs.push(new Orb(
                 Math.random() * canvas.width,
                 Math.random() * canvas.height,
-                80,
+                300,
                 colors[i]  // Each orb gets its own color
             ));
         }
