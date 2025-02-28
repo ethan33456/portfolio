@@ -6,7 +6,7 @@ const Banner = () => {
             <div className="flex flex-col">
                 <div className="flex flex-col gap-y-4">
                     <h1 className="text-Snow text-4xl lg:text-5xl font-bold mb-4">
-                        Hi, I'm Ethan Bell
+                        Hi, I'm Ethan Bell, You know
                     </h1>
                     <div className="py-4 font-cascadia-normal text-Snow pb-4 text-xl lg:text-2xl">
                         <span className="text-Snow font-bold">
