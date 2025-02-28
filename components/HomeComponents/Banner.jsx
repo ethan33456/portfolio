@@ -23,8 +23,7 @@ const Banner = () => {
                         </span>
                     </div>
                     <p className="text-Snow text-lg lg:text-xl mt-4 max-w-2xl">
-                        I specialize in building and designing exceptional digital experiences. 
-                        Currently, I'm focused on building accessible, human-centered products.
+                        Lorem Ipsum Dolor
                     </p>
                 </div>
             </div>
