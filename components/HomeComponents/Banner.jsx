@@ -23,7 +23,7 @@ const Banner = () => {
                         </span>
                     </div>
                     <p className="text-Snow text-lg lg:text-xl mt-4 max-w-2xl">
-                        Lorem Ipsum Dolor
+                        Lorem Ipsum Dolor Sit Amet Consectetur Adipisicing Elit.
                     </p>
                 </div>
             </div>
