@@ -3,53 +3,37 @@ const background = [
         eduCards: [
             {
                 id: 0,
-                title: 'UET Peshawar',
-                degree: 'BS, Computer System Engineering',
-                detail: "Bachelor's Degree in Computer System Engineering from UET Peshawar.",
-                year: '2018-2022'
+                title: 'Maryville University of Saint Louis',
+                degree: 'BS, Computer Science',
+                detail: "Bachelor of Science in Computer Science.",
+                year: 'May 2024 - Dec 2027'
             },
             {
                 id: 1,
-                title: 'Peshawar Model Degree College',
-                degree: 'HSSC, Pre Engineering',
-                detail: "Completed FSC part 1 and part 2 in Pre-Engineering from Peshawar Model Degree College.",
-                year: '2015-2017'
-            },
-            {
-                id: 2,
-                title: 'Falcon Academy',
-                degree: 'SSC, Science Subjects',
-                detail: "Completed SSC part 1 and part 2 in Science subjects from Falcon Academy Seni Gumbat Kohat",
-                year: '2013-2015'
+                title: 'LaunchCode',
+                degree: 'Computer Science',
+                detail: "Completed Computer Science program.",
+                year: '2019 - 2020'
             },
         ],
         expCards: [
             {
                 id: 1,
-                title: 'JMM Technologies',
-                role: 'Frontend Developer',
-                url: 'https://jmm.ltd/',
-                desc: 'As a frontend developer, I use React, Next & JavaScript to build user interfaces for web applications.',
-                year: '02/2023 - Present',
-                location: 'Peshawar, Pakistan'
+                title: 'Beanstalk Web Solutions',
+                role: 'Web Developer',
+                url: 'https://beanstalkwebsolutions.com',
+                desc: 'Developed custom WordPress themes and plugins tailored to client specifications. Managed and optimized AWS servers for high availability and security. Collaborated with design teams and integrated multiple external APIs to extend website functionality. Applied SEO best practices and ADA compliance guidelines while continuously refining development workflows.',
+                year: '07/2021 - Present',
+                location: 'St. Louis, Missouri'
             },
             {
                 id: 2,
-                title: 'HauzaTech',
-                role: 'Internee',
+                title: 'Self Employed',
+                role: 'Freelance Web Developer',
                 url: 'no website',
-                desc: 'As an Internee, I learned how to use React & JavaScript to build interactive websites.',
-                year: '02/2023 - Present',
-                location: 'Peshawar, Pakistan'
-            },
-            {
-                id: 3,
-                title: 'Encoder Bytes',
-                role: 'PHP Developer',
-                url: 'https://www.encoderbytes.com/',
-                desc: "I work there as a PHP developer, there I learned how to do CRUD'S operations in PHP, also I worked on Firebase",
-                year: '09/2020 - 02/2021',
-                location: 'Peshawar, Pakistan'
+                desc: 'Designed and developed WordPress websites, aligning closely with client visions. Handled all client communications and managed project expectations as the sole point of contact. Notable work includes fitzsrootbeer.com, afdentalstl.com, and ztsmusic.com.',
+                year: '09/2018 - 07/2021',
+                location: 'St. Louis, Missouri'
             },
         ]
     }

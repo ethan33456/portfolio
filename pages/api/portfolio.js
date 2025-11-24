@@ -1,235 +1,64 @@
 const portfolio = [
     {
         id: 0,
-        projectName: "JMM ERP",
-        url: "https://jmmerp.com/",
-        image: "projects/erp.png",
-        projectDetail: "Restructure your business with JMM ERP’s all-in-one cloud-based ERP. JMM ERP provides a robust, cost-effective online solution with state-of-the-art software to increase business value and enhance customer impact.",
+        projectName: "Chuck's Boots",
+        url: "https://chucksboots.com/",
+        image: "images/card-bg.jpg",
+        projectDetail: "An ecommerce platform offering a wide selection of boots, workwear, and western apparel for men, women, and kids. Features include a diverse catalog of brands like Thorogood and Carolina, 'Made in the USA' collections, and a user-friendly shopping experience.",
         technologiesUsed: [
             {
-                tech: "ReactJS"
+                tech: "Ecommerce"
             },
             {
-                tech: ".net"
+                tech: "Web Development"
             },
             {
-                tech: "GraphQL"
-            },
-            {
-                tech: "Ant Design"
-            },
-            {
-                tech: "TailwindCSS"
-            },
-        ]
-    },
-    {
-        id: 0,
-        projectName: "ABSCO",
-        url: "https://absco.sa/",
-        image: "projects/absco.png",
-        projectDetail: "ABSCO offer unparalleled business consulting solutions to meet client’s unique needs.",
-        technologiesUsed: [
-            {
-                tech: "ReactJS"
-            },
-            {
-                tech: "Ant Design"
-            },
-            {
-                tech: "TailwindCSS"
-            },
-        ]
-    },
-    {
-        id: 0,
-        projectName: "JMM Technologies",
-        url: "https://jmm.ltd/",
-        image: "projects/jmm.png",
-        projectDetail: "JMM Technologies is a start-up turned technology company with extensive years of experience delivering digital solutions. As a fast-growing tech firm, we help diverse businesses and organizations. Our expertise in innovative, state-of-the-art digital services accelerates business growth and enhances customer impact.",
-        technologiesUsed: [
-            {
-                tech: "ReactJS"
-            },
-            {
-                tech: ".net"
-            },
-            {
-                tech: "REST API's"
-            },
-            {
-                tech: "Ant Design"
-            },
-            {
-                tech: "TailwindCSS"
-            },
-        ]
-    },
-    {
-        id: 0,
-        projectName: "ALSN",
-        url: "https://alsn.app/",
-        image: "projects/alsn.png",
-        projectDetail: "ASLN drives digital transformation with certified document translation services. In an interconnected world where seamless communication is imperative, they are strategically positioned to cater to the needs of businesses, individuals, and organizations.",
-        technologiesUsed: [
-            {
-                tech: "ReactJS"
-            },
-            {
-                tech: ".net"
-            },
-            {
-                tech: "REST API's"
-            },
-            {
-                tech: "Ant Design"
-            },
-            {
-                tech: "TailwindCSS"
-            },
-        ]
-    },
-    {
-        id: 0,
-        projectName: "FirmSanad",
-        url: "/domain-expired",
-        image: "projects/firmsanad.png",
-        projectDetail: "Invest in Saudi Arabia, Streamline Your Business Setup Process in Saudi Arabia with FirmSanad Simplify the process of obtaining licenses and starting a business in Saudi Arabia with our streamlined platform.",
-        technologiesUsed: [
-            {
-                tech: "ReactJS"
-            },
-            {
-                tech: ".net"
-            },
-            {
-                tech: "REST API's"
-            },
-            {
-                tech: "Ant Design"
-            },
-            {
-                tech: "TailwindCSS"
-            },
-        ]
-    },
-    {
-        id: 0,
-        projectName: "Fateh Al Mustaqbil",
-        url: "https://fatehtour.com/",
-        image: "projects/fateh.png",
-        projectDetail: "Fateh Al Mustaqbil is a one-of-a-kind travel agency designed to cater to the interests of travelers across the globe, founded in 2023 in Riyadh, Saudi Arabia. Their expertise lies in crafting exceptional journeys tailored to each client's unique requirements, whether it be ticketing, hotel bookings, or visa assistance.",
-        technologiesUsed: [
-            {
-                tech: "ReactJS"
-            },
-            {
-                tech: ".net"
-            },
-            {
-                tech: "REST API's"
-            },
-            {
-                tech: "Ant Design"
-            },
-            {
-                tech: "TailwindCSS"
-            },
-        ]
-    },
-    {
-        id: 0,
-        projectName: "Tojjar",
-        url: "/domain-expired",
-        image: "projects/tojjar.png",
-        projectDetail: "Tojjar is ecommerce website,  where you can open your own store and sell products of different brands!",
-        technologiesUsed: [
-            {
-                tech: "Nextjs with SSR"
-            },
-            {
-                tech: "Laravel"
-            },
-            {
-                tech: "REST API's"
-            },
-            {
-                tech: "Ant Design"
-            },
-            {
-                tech: "TailwindCSS"
-            },
+                tech: "UX/UI Design"
+            }
         ]
     },
     {
         id: 1,
-        projectName: "Otawix",
-        url: "https://b2c.otawix.com/",
-        image: "projects/otawix.png",
-        projectDetail: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam corrupti aut veritatis, adipisci natus optio dolores cum rem? Aut perferendis fugit, eos rerum totam aspernatur iure alias temporibus ipsa perspiciatis!",
-        technologiesUsed: [
-            {
-                tech: "NextJS"
-            },
-            {
-                tech: "NodeJS"
-            },
-            {
-                tech: "REST API's"
-            },
-            {
-                tech: "MUI"
-            },
-            {
-                tech: "TailwindCSS"
-            },
-        ]
-    },
-    {
-        id: 2,
-        projectName: "Spatay",
-        url: "https://spatay.com/",
-        image: "projects/spatay.png",
-        projectDetail: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam corrupti aut veritatis, adipisci natus optio dolores cum rem? Aut perferendis fugit, eos rerum totam aspernatur iure alias temporibus ipsa perspiciatis!",
+        projectName: "Stratus",
+        url: "https://stratus-production.up.railway.app/",
+        image: "images/card-bg.jpg",
+        projectDetail: "An intelligent weather dashboard featuring AI-powered insights and a conversational weather assistant. Provides real-time current weather, 12-hour and 8-day forecasts, and personalized location saving capabilities.",
         technologiesUsed: [
             {
                 tech: "ReactJS"
             },
             {
-                tech: "NodeJS"
+                tech: "Artificial Intelligence"
             },
             {
-                tech: "REST API's"
+                tech: "Weather API"
             },
             {
-                tech: "Ant Design"
-            },
-            {
-                tech: "TailwindCSS"
-            },
+                tech: "Railway"
+            }
         ]
     },
-    // {
-    //     id: 2,
-    //     projectName: "Culyte",
-    //     url: "https://culyte.com",
-    //     image: "projects/culyte.png",
-    //     projectDetail: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam corrupti aut veritatis, adipisci natus optio dolores cum rem? Aut perferendis fugit, eos rerum totam aspernatur iure alias temporibus ipsa perspiciatis!",
-    //     technologiesUsed: [
-    //         {
-    //             tech: "ReactJS"
-    //         },
-    //         {
-    //             tech: "NodeJS"
-    //         },
-    //         {
-    //             tech: "Ant Design"
-    //         },
-    //         {
-    //             tech: "TailwindCSS"
-    //         },
-    //     ]
-    // },
+    {
+        id: 2,
+        projectName: "Price Bot",
+        url: "https://github.com/ethan33456/price-bot.git",
+        image: "images/card-bg.jpg",
+        projectDetail: "A Python-based automated deal hunter that scrapes the Best Buy API to find significant discounts on laptops and computers. Features configurable discount thresholds, automated email notifications, and detailed deal logging.",
+        technologiesUsed: [
+            {
+                tech: "Python"
+            },
+            {
+                tech: "Best Buy API"
+            },
+            {
+                tech: "Automation"
+            },
+            {
+                tech: "Web Scraping"
+            }
+        ]
+    }
 ]
 export default function handler(req, res) {
     res.status(200).json(portfolio)
