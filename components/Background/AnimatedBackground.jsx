@@ -85,11 +85,14 @@ const AnimatedBackground = () => {
         // Create only 3 orbs
         const colors = ['#4CAF50', '#2196F3', '#9C27B0'];
         const orbs = [];
+        const isMobile = window.innerWidth < 768;
+        const radius = isMobile ? 150 : 300;
+
         for (let i = 0; i < 3; i++) {
             orbs.push(new Orb(
-                Math.random() * (canvas.width - 600) + 300,  // Keep orbs away from edges
-                Math.random() * (canvas.height - 600) + 300, // Keep orbs away from edges
-                300,
+                Math.random() * (canvas.width - radius * 2) + radius,
+                Math.random() * (canvas.height - radius * 2) + radius,
+                radius,
                 colors[i]
             ));
         }
