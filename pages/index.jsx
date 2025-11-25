@@ -30,12 +30,8 @@ const home = () => {
                     <Banner />
                 </div>
                 
-                <div id="expertise">
+                <div id="expertise" className="hidden">
                     <MyExpertise />
-                </div>
-                
-                <div id="recommendations">
-                    <Recommendations />
                 </div>
                 
                 {/* Portfolio Section */}
@@ -55,6 +51,10 @@ const home = () => {
                             ))
                         }
                     </div>
+                </div>
+                
+                <div id="recommendations" className="px-5 py-10 lg:py-14">
+                    <Recommendations />
                 </div>
 
                 {/* Background Section */}
