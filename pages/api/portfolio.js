@@ -58,7 +58,7 @@ const portfolio = [
                 tech: "Web Scraping"
             }
         ]
-    }
+    },
     {
         id: 3,
         projectName: "Quick Translate",
