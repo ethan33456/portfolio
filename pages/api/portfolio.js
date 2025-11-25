@@ -59,6 +59,27 @@ const portfolio = [
             }
         ]
     }
+    {
+        id: 3,
+        projectName: "Quick Translate",
+        url: "https://github.com/ethan33456/quick-translate",
+        image: "images/card-bg.jpg",
+        projectDetail: "A Google Chrome extension that enables instant text translation. Users can highlight text and use the right-click context menu to quickly translate content to French, featuring a built-in notification system for translation results.",
+        technologiesUsed: [
+            {
+                tech: "JavaScript"
+            },
+            {
+                tech: "Chrome Extensions API"
+            },
+            {
+                tech: "Translation API"
+            },
+            {
+                tech: "Python"
+            }
+        ]
+    }
 ]
 export default function handler(req, res) {
     res.status(200).json(portfolio)
