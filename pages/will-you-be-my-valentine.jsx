@@ -1,10 +1,10 @@
-import { useState, useEffect, useRef, useCallback } from 'react'
+import { useState, useEffect, useLayoutEffect, useRef, useCallback } from 'react'
 import Head from 'next/head'
 
 // Portrait slideshow: use your own at /valentine/slide-1.jpg … slide-13.jpg, or placeholders below
-const USE_LOCAL_IMAGES = false // set true once you add slide-1.jpg … slide-13.jpg in public/valentine/
+const USE_LOCAL_IMAGES = true // set true once you add slide-1.jpeg … slide-13.jpeg in public/valentine/
 const SLIDE_IMAGES = USE_LOCAL_IMAGES
-  ? Array.from({ length: 13 }, (_, i) => `/valentine/slide-${i + 1}.jpg`)
+  ? Array.from({ length: 13 }, (_, i) => `/valentine/slide-${i + 1}.jpeg`)
   : Array.from(
       { length: 13 },
       (_, i) => `https://picsum.photos/seed/val${i + 1}/400/600`
@@ -13,14 +13,16 @@ const SLIDE_IMAGES = USE_LOCAL_IMAGES
 const SLIDE_DURATION_MS = 3500
 const HEART_COUNT = 60
 
-function Heart({ style, delay, dx, dy }) {
+function Heart({ left, top, delay, dx, dy, scale }) {
   return (
     <div
-      className="absolute pointer-events-none heart-burst"
+      className="heart-burst-outer"
       style={{
-        ...style,
+        left: `${left}%`,
+        top: `${top}%`,
         '--burst-dx': `${dx}px`,
         '--burst-dy': `${dy}px`,
+        '--burst-scale': scale,
         animationDelay: `${delay}ms`,
       }}
       aria-hidden
@@ -42,7 +44,7 @@ export default function WillYouBeMyValentine() {
   const containerRef = useRef(null)
   const videoRef = useRef(null)
 
-  // Slideshow auto-advance
+  // Slideshow auto-advance (resets when user clicks prev/next)
   useEffect(() => {
     if (slideshowDone) return
     const id = setInterval(() => {
@@ -57,13 +59,16 @@ export default function WillYouBeMyValentine() {
     return () => clearInterval(id)
   }, [slideshowDone, slideIndex])
 
-  // Initial position for "No" button (center-right of container)
-  useEffect(() => {
+  const goPrev = () => setSlideIndex((p) => (p > 0 ? p - 1 : SLIDE_IMAGES.length - 1))
+  const goNext = () => setSlideIndex((p) => (p < SLIDE_IMAGES.length - 1 ? p + 1 : 0))
+
+  // Initial position for "No" button (visible next to Yes) - useLayoutEffect so it's visible on first paint
+  useLayoutEffect(() => {
     if (!slideshowDone || !containerRef.current) return
     const rect = containerRef.current.getBoundingClientRect()
     setNoButtonPos((prev) => {
       if (prev.x === 0 && prev.y === 0) {
-        return { x: rect.width / 2 + 70, y: rect.height / 2 }
+        return { x: rect.width / 2 + 72, y: rect.height / 2 }
       }
       return prev
     })
@@ -161,9 +166,25 @@ export default function WillYouBeMyValentine() {
                 className="text-center text-lg md:text-xl font-semibold mb-6 tracking-wide"
                 style={{ color: '#c2185b' }}
               >
-                Our story in every moment
+                Us through the years (we still can&apos;t believe we put up with each other)
               </p>
               <div className="relative w-full aspect-[3/4] max-h-[70vh] rounded-2xl overflow-hidden bg-pink-100 shadow-inner">
+                <button
+                  type="button"
+                  onClick={goPrev}
+                  className="absolute left-2 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-white/90 hover:bg-white text-rose-600 shadow-md flex items-center justify-center transition"
+                  aria-label="Previous"
+                >
+                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clipRule="evenodd" /></svg>
+                </button>
+                <button
+                  type="button"
+                  onClick={goNext}
+                  className="absolute right-2 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-white/90 hover:bg-white text-rose-600 shadow-md flex items-center justify-center transition"
+                  aria-label="Next"
+                >
+                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd" /></svg>
+                </button>
                 {SLIDE_IMAGES.map((src, i) => (
                   <div
                     key={i}
@@ -230,23 +251,18 @@ export default function WillYouBeMyValentine() {
                 muted={false}
                 loop
               />
-              <p className="text-center text-rose-600 font-medium mt-4 py-2">
-                I love you! 💕
-              </p>
             </div>
           ) : (
-            <div className="relative w-full h-96 flex items-center justify-center">
+            <div className="fixed inset-0 pointer-events-none flex items-center justify-center" style={{ zIndex: 9999 }}>
               {hearts.map((h) => (
                 <Heart
                   key={h.id}
-                  style={{
-                    left: `${h.left}%`,
-                    top: `${h.top}%`,
-                    transform: `translate(-50%, -50%) scale(${h.scale})`,
-                  }}
+                  left={h.left}
+                  top={h.top}
                   delay={h.delay}
                   dx={h.dx}
                   dy={h.dy}
+                  scale={h.scale}
                 />
               ))}
             </div>
@@ -259,7 +275,7 @@ export default function WillYouBeMyValentine() {
         {slideshowDone && !yesClicked && (noButtonPos.x !== 0 || noButtonPos.y !== 0) && (
           <button
             type="button"
-            className="absolute rounded-2xl font-semibold text-rose-700 bg-rose-100 border-2 border-rose-300 shadow select-none transition-all duration-200 px-8 py-3"
+            className="absolute rounded-2xl font-semibold text-rose-700 bg-rose-100 border-2 border-rose-300 shadow-lg select-none transition-all duration-200 px-8 py-3 z-[100]"
             style={{
               left: noButtonPos.x,
               top: noButtonPos.y,
@@ -286,17 +302,22 @@ export default function WillYouBeMyValentine() {
             opacity: 0.7;
           }
         }
-        @keyframes heart-burst {
+        .animate-float {
+          animation: float 4s ease-in-out infinite;
+        }
+      `}</style>
+      <style jsx global>{`
+        @keyframes heart-burst-keyframes {
           0% {
             transform: translate(-50%, -50%) scale(0);
             opacity: 1;
           }
-          20% {
+          25% {
             transform: translate(
                 calc(-50% + var(--burst-dx, 0px)),
                 calc(-50% + var(--burst-dy, 0px))
               )
-              scale(1);
+              scale(var(--burst-scale, 1));
             opacity: 1;
           }
           100% {
@@ -304,16 +325,15 @@ export default function WillYouBeMyValentine() {
                 calc(-50% + var(--burst-dx, 0px)),
                 calc(-50% + var(--burst-dy, 0px))
               )
-              scale(1.1);
+              scale(var(--burst-scale, 1));
             opacity: 0;
           }
         }
-        .animate-float {
-          animation: float 4s ease-in-out infinite;
-        }
-        .heart-burst {
-          animation: heart-burst 2.5s ease-out forwards;
+        .heart-burst-outer {
+          position: fixed;
+          transform: translate(-50%, -50%);
           pointer-events: none;
+          animation: heart-burst-keyframes 2.5s ease-out forwards;
         }
       `}</style>
     </>

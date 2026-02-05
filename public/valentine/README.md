@@ -3,7 +3,7 @@
 Add your own files here for the `/will-you-be-my-valentine` page:
 
 - **Slideshow (13 portrait images):**  
-  Name them `slide-1.jpg` through `slide-13.jpg` (or .png).  
+  Name them `slide-1.jpeg` through `slide-13.jpeg` (or .jpg / .png).  
   Portrait orientation works best (e.g. 400×600 or similar).
 
 - **Response video (after "Yes!"):**  
