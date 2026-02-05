@@ -206,7 +206,7 @@ export default function WillYouBeMyValentine() {
         </div>
 
         <div
-          className="relative z-10 flex flex-col items-center justify-center w-full max-w-lg rounded-3xl px-6 py-10 md:py-14 shadow-xl"
+          className={`relative z-10 flex flex-col items-center justify-center w-full rounded-3xl px-6 py-10 md:py-14 shadow-xl ${showVideo ? 'max-w-6xl' : 'max-w-lg'}`}
           style={{ backgroundColor: '#fff5f8' }}
         >
           {!slideshowDone ? (
@@ -299,10 +299,10 @@ export default function WillYouBeMyValentine() {
               </div>
             </>
           ) : showVideo ? (
-            <div className="w-full rounded-2xl overflow-hidden bg-black">
+            <div className="w-full max-w-6xl mx-auto flex items-center justify-center min-h-[85vh] rounded-2xl overflow-hidden bg-black">
               <video
                 ref={videoRef}
-                className="w-full max-h-[70vh] object-contain"
+                className="w-full h-full max-h-[85vh] object-contain"
                 src="/valentine/response-video.mp4"
                 controls
                 playsInline
