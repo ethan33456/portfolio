@@ -13,6 +13,22 @@ const SLIDE_IMAGES = USE_LOCAL_IMAGES
 const SLIDE_DURATION_MS = 3500
 const HEART_COUNT = 60
 
+const SLIDE_CAPTIONS = [
+  'Farm Fest, 2018',
+  'Yelapa, 2018',
+  'Table Rock, 2019',
+  'Miami (I think), 2019',
+  'Sayulita, 2022',
+  'Wedding, 2022',
+  'Utah, 2024',
+  'Paris, 2024',
+  'Paris, 2024',
+  'Palm Springs, 2025',
+  'Bradenton, 2025',
+  'St. Louis, 2025',
+  'New Orleans, 2025',
+]
+
 function Heart({ left, top, delay, dx, dy, scale }) {
   return (
     <div
@@ -43,6 +59,8 @@ export default function WillYouBeMyValentine() {
   const [noButtonPos, setNoButtonPos] = useState({ x: 0, y: 0 })
   const containerRef = useRef(null)
   const videoRef = useRef(null)
+  const noTargetRef = useRef({ x: 0, y: 0 })
+  const noPosRef = useRef({ x: 0, y: 0 })
 
   // Slideshow auto-advance (resets when user clicks prev/next)
   useEffect(() => {
@@ -60,21 +78,32 @@ export default function WillYouBeMyValentine() {
   }, [slideshowDone, slideIndex])
 
   const goPrev = () => setSlideIndex((p) => (p > 0 ? p - 1 : SLIDE_IMAGES.length - 1))
-  const goNext = () => setSlideIndex((p) => (p < SLIDE_IMAGES.length - 1 ? p + 1 : 0))
+  const goNext = () => {
+    setSlideIndex((p) => {
+      if (p >= SLIDE_IMAGES.length - 1) {
+        setSlideshowDone(true)
+        return p
+      }
+      return p + 1
+    })
+  }
 
-  // Initial position for "No" button (visible next to Yes) - useLayoutEffect so it's visible on first paint
+  // Initial position for "No" button: inline with Yes (same row, to the right of center)
+  const NO_BUTTON_OFFSET_X = 100
   useLayoutEffect(() => {
     if (!slideshowDone || !containerRef.current) return
     const rect = containerRef.current.getBoundingClientRect()
+    const x = rect.width / 2 + NO_BUTTON_OFFSET_X
+    const y = rect.height / 2
     setNoButtonPos((prev) => {
-      if (prev.x === 0 && prev.y === 0) {
-        return { x: rect.width / 2 + 72, y: rect.height / 2 }
-      }
+      if (prev.x === 0 && prev.y === 0) return { x, y }
       return prev
     })
+    noPosRef.current = { x, y }
+    noTargetRef.current = { x, y }
   }, [slideshowDone])
 
-  // Running "No" button: move away from mouse
+  // Running "No" button: smooth movement away from mouse (button stays on far side of cursor from center)
   const handleMouseMove = useCallback(
     (e) => {
       if (!containerRef.current || !slideshowDone || yesClicked) return
@@ -83,18 +112,38 @@ export default function WillYouBeMyValentine() {
       const mouseY = e.clientY - rect.top
       const centerX = rect.width / 2
       const centerY = rect.height / 2
-      const runRadius = 140
-      let angle = Math.atan2(mouseY - centerY, mouseX - centerX)
-      const dist = Math.hypot(mouseX - centerX, mouseY - centerY)
-      if (dist < 180) {
-        angle += Math.PI
+      const runRadius = 160
+      const dx = mouseX - centerX
+      const dy = mouseY - centerY
+      const len = Math.hypot(dx, dy) || 1
+      const ux = dx / len
+      const uy = dy / len
+      noTargetRef.current = {
+        x: mouseX + ux * runRadius,
+        y: mouseY + uy * runRadius,
       }
-      const bx = centerX + Math.cos(angle) * runRadius
-      const by = centerY + Math.sin(angle) * runRadius
-      setNoButtonPos({ x: bx, y: by })
     },
     [slideshowDone, yesClicked]
   )
+
+  useEffect(() => {
+    if (!slideshowDone || yesClicked) return
+    let rafId
+    const tick = () => {
+      const target = noTargetRef.current
+      const pos = noPosRef.current
+      const lerp = 0.12
+      const newX = pos.x + (target.x - pos.x) * lerp
+      const newY = pos.y + (target.y - pos.y) * lerp
+      if (Math.abs(newX - pos.x) > 0.5 || Math.abs(newY - pos.y) > 0.5) {
+        noPosRef.current = { x: newX, y: newY }
+        setNoButtonPos({ x: newX, y: newY })
+      }
+      rafId = requestAnimationFrame(tick)
+    }
+    rafId = requestAnimationFrame(tick)
+    return () => cancelAnimationFrame(rafId)
+  }, [slideshowDone, yesClicked])
 
   const handleYesClick = () => {
     setYesClicked(true)
@@ -163,10 +212,16 @@ export default function WillYouBeMyValentine() {
           {!slideshowDone ? (
             <>
               <p
-                className="text-center text-lg md:text-xl font-semibold mb-6 tracking-wide"
+                className="text-center text-lg md:text-xl font-bold mb-6 tracking-wide"
                 style={{ color: '#c2185b' }}
               >
-                Us through the years (we still can&apos;t believe we put up with each other)
+                Happy Valentine's Day!
+              </p>
+              <p
+                className="text-center text-sm md:text-xl font-semibold mb-6 tracking-wide"
+                style={{ color: '#c2185b' }}
+              >
+                Years later and you’re still my favorite person.
               </p>
               <div className="relative w-full aspect-[3/4] max-h-[70vh] rounded-2xl overflow-hidden bg-pink-100 shadow-inner">
                 <button
@@ -215,19 +270,23 @@ export default function WillYouBeMyValentine() {
                   </div>
                 ))}
                 <div
-                  className="absolute bottom-2 left-1/2 -translate-x-1/2 text-xs text-rose-400/90"
+                  className="absolute bottom-2 left-1/2 -translate-x-1/2 text-center w-full px-4"
                   style={{ zIndex: 2 }}
                 >
-                  {slideIndex + 1} / {SLIDE_IMAGES.length}
+                  <p className="text-sm md:text-base font-medium text-rose-700 drop-shadow-sm">
+                    {SLIDE_CAPTIONS[slideIndex]}
+                  </p>
+                  <p className="text-xs text-rose-400/90 mt-0.5">
+                    {slideIndex + 1} / {SLIDE_IMAGES.length}
+                  </p>
                 </div>
               </div>
             </>
           ) : !yesClicked ? (
             <>
-              <p className="text-2xl md:text-4xl font-bold text-center mb-2 text-rose-700">
+              <p className="text-2xl md:text-4xl font-bold text-center mb-2 text-rose-700" style={{ marginBottom: '30px' }}>
                 Will you be my valentine?
               </p>
-              <p className="text-rose-400 text-sm mb-8">💕</p>
               <div className="flex items-center justify-center">
                 <button
                   type="button"
@@ -268,8 +327,6 @@ export default function WillYouBeMyValentine() {
             </div>
           )}
         </div>
-
-        <p className="mt-6 text-rose-400/80 text-sm z-10">Made with love</p>
 
         {/* No button runs away from cursor and is not clickable */}
         {slideshowDone && !yesClicked && (noButtonPos.x !== 0 || noButtonPos.y !== 0) && (
