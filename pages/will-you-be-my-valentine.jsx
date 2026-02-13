@@ -1,8 +1,8 @@
-import { useState, useEffect, useLayoutEffect, useRef, useCallback } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import Head from 'next/head'
 
-// Portrait slideshow: use your own at /valentine/slide-1.jpg … slide-13.jpg, or placeholders below
-const USE_LOCAL_IMAGES = true // set true once you add slide-1.jpeg … slide-13.jpeg in public/valentine/
+// Portrait slideshow: use your own at /valentine/slide-1.jpeg … slide-13.jpeg in public/valentine/
+const USE_LOCAL_IMAGES = true
 const SLIDE_IMAGES = USE_LOCAL_IMAGES
   ? Array.from({ length: 13 }, (_, i) => `/valentine/slide-${i + 1}.jpeg`)
   : Array.from(
@@ -56,11 +56,15 @@ export default function WillYouBeMyValentine() {
   const [yesClicked, setYesClicked] = useState(false)
   const [hearts, setHearts] = useState([])
   const [showVideo, setShowVideo] = useState(false)
-  const [noButtonPos, setNoButtonPos] = useState({ x: 0, y: 0 })
-  const containerRef = useRef(null)
   const videoRef = useRef(null)
+
+  // No button state
+  const [noFleeing, setNoFleeing] = useState(false)
+  const [noPos, setNoPos] = useState({ x: 0, y: 0 })
+  const noButtonRef = useRef(null)
   const noTargetRef = useRef({ x: 0, y: 0 })
   const noPosRef = useRef({ x: 0, y: 0 })
+  const FLEE_THRESHOLD = 120 // px — mouse must be within this to trigger flee
 
   // Slideshow auto-advance (resets when user clicks prev/next)
   useEffect(() => {
@@ -88,62 +92,71 @@ export default function WillYouBeMyValentine() {
     })
   }
 
-  // Initial position for "No" button: inline with Yes (same row, to the right of center)
-  const NO_BUTTON_OFFSET_X = 100
-  useLayoutEffect(() => {
-    if (!slideshowDone || !containerRef.current) return
-    const rect = containerRef.current.getBoundingClientRect()
-    const x = rect.width / 2 + NO_BUTTON_OFFSET_X
-    const y = rect.height / 2
-    setNoButtonPos((prev) => {
-      if (prev.x === 0 && prev.y === 0) return { x, y }
-      return prev
-    })
-    noPosRef.current = { x, y }
-    noTargetRef.current = { x, y }
-  }, [slideshowDone])
-
-  // Running "No" button: smooth movement away from mouse (button stays on far side of cursor from center)
+  // Mouse move handler: check distance to No button, flee if close
   const handleMouseMove = useCallback(
     (e) => {
-      if (!containerRef.current || !slideshowDone || yesClicked) return
-      const rect = containerRef.current.getBoundingClientRect()
-      const mouseX = e.clientX - rect.left
-      const mouseY = e.clientY - rect.top
-      const centerX = rect.width / 2
-      const centerY = rect.height / 2
-      const runRadius = 160
-      const dx = mouseX - centerX
-      const dy = mouseY - centerY
-      const len = Math.hypot(dx, dy) || 1
-      const ux = dx / len
-      const uy = dy / len
-      noTargetRef.current = {
-        x: mouseX + ux * runRadius,
-        y: mouseY + uy * runRadius,
+      if (!slideshowDone || yesClicked) return
+
+      const mouseX = e.clientX
+      const mouseY = e.clientY
+
+      if (!noFleeing) {
+        // Check if mouse is near the inline No button
+        if (!noButtonRef.current) return
+        const rect = noButtonRef.current.getBoundingClientRect()
+        const btnCX = rect.left + rect.width / 2
+        const btnCY = rect.top + rect.height / 2
+        const dist = Math.hypot(mouseX - btnCX, mouseY - btnCY)
+        if (dist < FLEE_THRESHOLD) {
+          // Start fleeing from current position
+          noPosRef.current = { x: btnCX, y: btnCY }
+          noTargetRef.current = { x: btnCX, y: btnCY }
+          setNoPos({ x: btnCX, y: btnCY })
+          setNoFleeing(true)
+        }
+      } else {
+        // Already fleeing: compute target position away from mouse
+        const bx = noPosRef.current.x
+        const by = noPosRef.current.y
+        const dx = bx - mouseX
+        const dy = by - mouseY
+        const dist = Math.hypot(dx, dy) || 1
+
+        // If mouse is getting close, push it away
+        if (dist < 200) {
+          const pushDist = 200
+          noTargetRef.current = {
+            x: mouseX + (dx / dist) * pushDist,
+            y: mouseY + (dy / dist) * pushDist,
+          }
+        }
+
+        // Clamp target within viewport
+        const pad = 60
+        noTargetRef.current.x = Math.max(pad, Math.min(window.innerWidth - pad, noTargetRef.current.x))
+        noTargetRef.current.y = Math.max(pad, Math.min(window.innerHeight - pad, noTargetRef.current.y))
       }
     },
-    [slideshowDone, yesClicked]
+    [slideshowDone, yesClicked, noFleeing]
   )
 
+  // Animation loop for smooth No button movement
   useEffect(() => {
-    if (!slideshowDone || yesClicked) return
+    if (!noFleeing || yesClicked) return
     let rafId
     const tick = () => {
       const target = noTargetRef.current
       const pos = noPosRef.current
-      const lerp = 0.12
+      const lerp = 0.1
       const newX = pos.x + (target.x - pos.x) * lerp
       const newY = pos.y + (target.y - pos.y) * lerp
-      if (Math.abs(newX - pos.x) > 0.5 || Math.abs(newY - pos.y) > 0.5) {
-        noPosRef.current = { x: newX, y: newY }
-        setNoButtonPos({ x: newX, y: newY })
-      }
+      noPosRef.current = { x: newX, y: newY }
+      setNoPos({ x: newX, y: newY })
       rafId = requestAnimationFrame(tick)
     }
     rafId = requestAnimationFrame(tick)
     return () => cancelAnimationFrame(rafId)
-  }, [slideshowDone, yesClicked])
+  }, [noFleeing, yesClicked])
 
   const handleYesClick = () => {
     setYesClicked(true)
@@ -185,7 +198,6 @@ export default function WillYouBeMyValentine() {
           boxSizing: 'border-box',
         }}
         onMouseMove={handleMouseMove}
-        ref={containerRef}
       >
         {/* Floating decorative hearts in background */}
         <div className="fixed inset-0 pointer-events-none overflow-hidden" aria-hidden>
@@ -206,22 +218,23 @@ export default function WillYouBeMyValentine() {
         </div>
 
         <div
-          className={`relative z-10 flex flex-col items-center justify-center w-full rounded-3xl px-6 py-10 md:py-14 shadow-xl ${showVideo ? 'max-w-6xl' : 'max-w-lg'}`}
+          className={`relative z-10 flex flex-col items-center justify-center w-full rounded-3xl px-6 py-10 md:py-14 shadow-xl ${showVideo ? 'max-w-md' : 'max-w-lg'}`}
           style={{ backgroundColor: '#fff5f8' }}
         >
+          {/* =================== SLIDESHOW =================== */}
           {!slideshowDone ? (
             <>
               <p
                 className="text-center text-lg md:text-xl font-bold mb-6 tracking-wide"
                 style={{ color: '#c2185b' }}
               >
-                Happy Valentine's Day!
+                Happy Valentine&apos;s Day!
               </p>
               <p
                 className="text-center text-sm md:text-xl font-semibold mb-6 tracking-wide"
                 style={{ color: '#c2185b' }}
               >
-                Years later and you’re still my favorite person.
+                Years later and you&apos;re still my favorite person.
               </p>
               <div className="relative w-full aspect-[3/4] max-h-[70vh] rounded-2xl overflow-hidden bg-pink-100 shadow-inner">
                 <button
@@ -282,28 +295,43 @@ export default function WillYouBeMyValentine() {
                 </div>
               </div>
             </>
+
+          /* =================== QUESTION =================== */
           ) : !yesClicked ? (
             <>
-              <p className="text-2xl md:text-4xl font-bold text-center mb-2 text-rose-700" style={{ marginBottom: '30px' }}>
+              <p className="text-2xl md:text-4xl font-bold text-center mb-8 text-rose-700">
                 Will you be my valentine?
               </p>
-              <div className="flex items-center justify-center">
+              <p className="text-rose-400 text-sm mb-8">💕</p>
+              <div className="flex items-center justify-center gap-4">
                 <button
                   type="button"
                   onClick={handleYesClick}
-                  className="px-8 py-3 rounded-2xl font-semibold text-white shadow-lg hover:scale-105 active:scale-95 transition transform select-none relative"
+                  className="px-8 py-3 rounded-2xl font-semibold text-white shadow-lg hover:scale-105 active:scale-95 transition transform select-none"
                   style={{ backgroundColor: '#e91e63' }}
                 >
                   Yes!
                 </button>
+                {/* Inline No — visible only when not fleeing */}
+                {!noFleeing && (
+                  <button
+                    ref={noButtonRef}
+                    type="button"
+                    className="px-8 py-3 rounded-2xl font-semibold text-rose-700 bg-rose-100 border-2 border-rose-300 shadow-lg select-none"
+                  >
+                    No
+                  </button>
+                )}
               </div>
             </>
+
+          /* =================== VIDEO =================== */
           ) : showVideo ? (
-            <div className="w-full max-w-6xl mx-auto flex items-center justify-center min-h-[85vh] rounded-2xl overflow-hidden bg-black">
+            <div className="w-full flex items-center justify-center rounded-2xl overflow-hidden bg-black" style={{ maxHeight: '85vh' }}>
               <video
                 ref={videoRef}
-                className="w-full h-full max-h-[85vh] object-contain"
-                src="/valentine/response-video.mp4"
+                className="h-full w-auto max-h-[85vh] object-contain"
+                src="/valentine/video.mp4"
                 controls
                 playsInline
                 autoPlay
@@ -311,6 +339,8 @@ export default function WillYouBeMyValentine() {
                 loop
               />
             </div>
+
+          /* =================== HEARTS =================== */
           ) : (
             <div className="fixed inset-0 pointer-events-none flex items-center justify-center" style={{ zIndex: 9999 }}>
               {hearts.map((h) => (
@@ -328,14 +358,16 @@ export default function WillYouBeMyValentine() {
           )}
         </div>
 
-        {/* No button runs away from cursor and is not clickable */}
-        {slideshowDone && !yesClicked && (noButtonPos.x !== 0 || noButtonPos.y !== 0) && (
+        <p className="mt-6 text-rose-400/80 text-sm z-10">Made with love</p>
+
+        {/* Fleeing No button — fixed to viewport, smooth lerp */}
+        {slideshowDone && !yesClicked && noFleeing && (
           <button
             type="button"
-            className="absolute rounded-2xl font-semibold text-rose-700 bg-rose-100 border-2 border-rose-300 shadow-lg select-none transition-all duration-200 px-8 py-3 z-[100]"
+            className="fixed rounded-2xl font-semibold text-rose-700 bg-rose-100 border-2 border-rose-300 shadow-lg select-none px-8 py-3 z-[9999]"
             style={{
-              left: noButtonPos.x,
-              top: noButtonPos.y,
+              left: noPos.x,
+              top: noPos.y,
               transform: 'translate(-50%, -50%)',
               pointerEvents: 'none',
             }}
