@@ -303,7 +303,6 @@ export default function WillYouBeMyValentine() {
               <p className="text-2xl md:text-4xl font-bold text-center mb-8 text-rose-700">
                 Will you be my valentine?
               </p>
-              <p className="text-rose-400 text-sm mb-8">💕</p>
               <div className="flex items-center justify-center gap-4">
                 <button
                   type="button"
