@@ -194,8 +194,9 @@ export default function WillYouBeMyValentine() {
         className="relative min-h-screen flex flex-col items-center justify-center p-4 md:p-8 overflow-hidden"
         style={{
           background: 'linear-gradient(135deg, #f8b4c4 0%, #fce4ec 50%, #f8bbd9 100%)',
-          border: '16px solid #e91e63',
           boxSizing: 'border-box',
+          margin: '2rem',
+          borderRadius: '30px',
         }}
         onMouseMove={handleMouseMove}
       >
@@ -358,7 +359,6 @@ export default function WillYouBeMyValentine() {
           )}
         </div>
 
-        <p className="mt-6 text-rose-400/80 text-sm z-10">Made with love</p>
 
         {/* Fleeing No button — fixed to viewport, smooth lerp */}
         {slideshowDone && !yesClicked && noFleeing && (
@@ -396,6 +396,10 @@ export default function WillYouBeMyValentine() {
         }
       `}</style>
       <style jsx global>{`
+        html,
+        #__next {
+          background-color: #f88eb2 !important;
+        }
         @keyframes heart-burst-keyframes {
           0% {
             transform: translate(-50%, -50%) scale(0);
